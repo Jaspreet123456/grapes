@@ -5,7 +5,7 @@ import presetWebpage from 'grapesjs-preset-webpage';
 import presetNavbar from 'grapesjs-navbar';
 import gjsForms from 'grapesjs-plugin-forms';
 
-const myCustomPlugin = (editor) => {
+const myCustomPlugin = (editor: any) => {
     editor.BlockManager.add('centered-block', {
         label: 'Centered Block',
         content: `
@@ -98,10 +98,8 @@ const Editor: React.FC = () => {
                 autosave: true,
                 autoload: true,
                 stepsBeforeSave: 1,
-                storeComponents: true,
-                storeStyles: true,
-                storeHtml: true,
-                storeCss: true,
+                // Simplified configuration: Store state using storageManager
+                
             },
             plugins: [presetNewsletter, presetWebpage, presetNavbar, gjsForms, myCustomPlugin],
             pluginsOpts: {
