@@ -92,7 +92,7 @@ const myCustomPlugin = (editor: any) => {
         thumbnail: string;
     }
 
-    const script = function () {
+    const script = function (this:HTMLElement) {
         const apiEndpoint = 'https://dummyjson.com/products';
     
         fetch(apiEndpoint)
