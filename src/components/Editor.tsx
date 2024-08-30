@@ -85,6 +85,13 @@ const myCustomPlugin = (editor: any) => {
         attributes: { class: 'gjs-fonts gjs-f-map' },
     });
 
+    interface Product {
+        id: number;
+        title: string;
+        price: number;
+        thumbnail: string;
+    }
+
     const script = function () {
         const apiEndpoint = 'https://dummyjson.com/products';
     
@@ -94,7 +101,7 @@ const myCustomPlugin = (editor: any) => {
                 const products = data.products.slice(0, 6);
                 console.log('Product data:', products);
     
-                const productCards = products.map(product => `
+                const productCards = products.map((product: Product) => `
                     <div class="product-card" style="border: 1px solid #ddd; padding: 10px; margin: 10px; border-radius: 5px; text-align: center; flex: 1 1 30%;">
                         <img src="${product.thumbnail}" alt="${product.title}" class="product-image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;" />
                         <h3 class="product-title" style="margin: 10px 0;">${product.title}</h3>
@@ -120,6 +127,7 @@ const myCustomPlugin = (editor: any) => {
                 style: {
                     width: '100%',
                     minHeight: '300px',
+                    background: 'white',
                     overflow: 'auto'
                 }
             }
