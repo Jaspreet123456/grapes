@@ -92,7 +92,7 @@ const myCustomPlugin = (editor: any) => {
         thumbnail: string;
     }
 
-    const script = function (this:HTMLElement) {
+    const script = function (this: HTMLElement) {
         const apiEndpoint = 'https://dummyjson.com/products';
     
         fetch(apiEndpoint)
@@ -102,7 +102,7 @@ const myCustomPlugin = (editor: any) => {
                 console.log('Product data:', products);
     
                 const productCards = products.map((product: Product) => `
-                    <div class="product-card" style="border: 1px solid #ddd; padding: 10px; margin: 10px; border-radius: 5px; text-align: center; flex: 1 1 30%;">
+                    <div class="product-card" style="border: 1px solid #ddd; padding: 10px; margin: 10px; border-radius: 5px; text-align: center;">
                         <img src="${product.thumbnail}" alt="${product.title}" class="product-image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;" />
                         <h3 class="product-title" style="margin: 10px 0;">${product.title}</h3>
                         <p class="product-price" style="font-weight: bold;">$${product.price}</p>
@@ -110,7 +110,28 @@ const myCustomPlugin = (editor: any) => {
                 `).join('');
     
                 this.innerHTML = `
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                    <style>
+                        .product-container {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 10px;
+                            justify-content: center;
+                        }
+                        .product-card {
+                            flex: 1 1 100%;
+                        }
+                        @media (min-width: 600px) {
+                            .product-card {
+                                flex: 1 1 48%; /* 2 items per row on tablets */
+                            }
+                        }
+                        @media (min-width: 960px) {
+                            .product-card {
+                                flex: 1 1 30%; /* 3 items per row on larger screens */
+                            }
+                        }
+                    </style>
+                    <div class="product-container">
                         ${productCards}
                     </div>
                 `;
