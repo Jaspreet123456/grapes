@@ -84,6 +84,54 @@ const myCustomPlugin = (editor: any) => {
         category: 'Custom Blocks',
         attributes: { class: 'gjs-fonts gjs-f-map' },
     });
+
+    const script = function () {
+        const apiEndpoint = 'https://dummyjson.com/products';
+    
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                const products = data.products.slice(0, 6);
+                console.log('Product data:', products);
+    
+                const productCards = products.map(product => `
+                    <div class="product-card" style="border: 1px solid #ddd; padding: 10px; margin: 10px; border-radius: 5px; text-align: center; flex: 1 1 30%;">
+                        <img src="${product.thumbnail}" alt="${product.title}" class="product-image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;" />
+                        <h3 class="product-title" style="margin: 10px 0;">${product.title}</h3>
+                        <p class="product-price" style="font-weight: bold;">$${product.price}</p>
+                    </div>
+                `).join('');
+    
+                this.innerHTML = `
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                        ${productCards}
+                    </div>
+                `;
+            })
+            .catch(error => {
+                console.error('Error fetching products:', error);
+            });
+    };
+    
+    editor.Components.addType('comp-with-js', {
+        model: {
+            defaults: {
+                script,
+                style: {
+                    width: '100%',
+                    minHeight: '300px',
+                    overflow: 'auto'
+                }
+            }
+        }
+    });
+    
+    editor.BlockManager.add('test-block', {
+        label: 'Product Block',
+        attributes: { class: 'fa fa-box' },
+        content: { type: 'comp-with-js' },
+    });
+
 };
 
 
@@ -98,8 +146,10 @@ const Editor: React.FC = () => {
                 autosave: true,
                 autoload: true,
                 stepsBeforeSave: 1,
-                // Simplified configuration: Store state using storageManager
-                
+                // storeComponents: true,
+                // storeStyles: true,
+                // storeHtml: true,
+                // storeCss: true,
             },
             plugins: [presetNewsletter, presetWebpage, presetNavbar, gjsForms, myCustomPlugin],
             pluginsOpts: {

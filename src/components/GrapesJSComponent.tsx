@@ -238,67 +238,38 @@
 //   // Add custom CSS to the editor
 //   const addCustomCss = () => {
 //     const css = `
-//     .favorite-products {
-//       display: flex;
-//       flex-wrap: wrap;
-//       gap: 10px;
-//     }
+//     #product-container {
+//     display: flex;
+//     flex-wrap: wrap;
+//     gap: 16px;
+//     justify-content: center;
+// }
 
-//     .product-card {
-//       flex: 1 1 calc(33.333% - 20px); /* Adjust for 3 items per row */
-//       box-sizing: border-box;
-//       border: 1px solid #ddd;
-//       border-radius: 4px;
-//       padding: 10px;
-//       text-align: center;
-//     }
+// .product-card {
+//     background: #fff;
+//     border: 1px solid #ddd;
+//     border-radius: 8px;
+//     overflow: hidden;
+//     width: 250px;
+//     text-align: center;
+//     padding: 16px;
+// }
 
-//     .product-card img {
-//       max-width: 100%;
-//       height: auto;
-//     }
+// .product-image {
+//     width: 100%;
+//     height: auto;
+//     border-bottom: 1px solid #ddd;
+// }
 
-//     .product-card h3 {
-//       margin: 10px 0 5px;
-//     }
+// .product-title {
+//     font-size: 1.2em;
+//     margin: 16px 0 8px;
+// }
 
-//     .product-card p {
-//       margin: 0;
-//       color: #333;
-//     }
-
-//       .alert-btn {
-//         background-color: #f00;
-//         color: #fff;
-//         border: none;
-//         padding: 10px 20px;
-//         cursor: pointer;
-//       }
-
-//       .alert-btn:hover {
-//         background-color: #c00;
-//       }
-
-//       .txt-red {
-//         color: red;
-//       }
-
-//       .row {
-//         display: flex;
-//         flex-wrap: wrap;
-//         margin: -15px;
-//       }
-
-//       .col-12, .col-6, .col-4, .col-3, .col-9 {
-//         padding: 15px;
-//         box-sizing: border-box;
-//       }
-
-//       .col-12 { width: 100%; margin-top:20px }
-//       .col-6 { width: 50%; margin-top:20px }
-//       .col-4 { width: 33.33%; margin-top:20px }
-//       .col-3 { width: 25%; margin-top:20px }
-//       .col-9 { width: 75%; margin-top:20px}
+// .product-price {
+//     font-size: 1.1em;
+//     color: #333;
+// }
 //     `;
 
 //     editor.CssComposer.addRules(css);
