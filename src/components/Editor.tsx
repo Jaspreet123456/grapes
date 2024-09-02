@@ -5,111 +5,122 @@ import presetWebpage from 'grapesjs-preset-webpage';
 import presetNavbar from 'grapesjs-navbar';
 import gjsForms from 'grapesjs-plugin-forms';
 
-const myCustomPlugin = (editor: any) => {
-    editor.BlockManager.add('centered-block', {
-        label: 'Centered Block',
-        content: `
-      <div style="display: flex; justify-content: center; align-items: center; height: 200px; border: 1px solid #ddd;">
-        <p style="text-align: center;">This is a centered block.</p>
-      </div>
-    `,
-        category: 'Custom Blocks',
-        attributes: { class: 'gjs-fonts gjs-f-text' },
+// const saveTemplate = async (editorInstance: any) => {
+//   if (!editorInstance) {
+//     console.error('Editor instance is undefined');
+//     return;
+//   }
+
+//   try {
+//     const html = editorInstance.getHtml();
+//     const css = editorInstance.getCss();
+//     const components = editorInstance.getComponents();
+//     const styles = editorInstance.getStyle();
+
+//     const scriptElements = Array.from(
+//       document.querySelectorAll('#editor script')
+//     );
+//     const scripts = scriptElements.map(script => script.textContent || '').join('\n');
+
+//     const response = await fetch('/api/save-template', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ html, css, components, styles, scripts }),
+//     });
+
+//     if (response.ok) {
+//       const data = await response.json();
+//       if (data.success) {
+//         console.log('Template saved', data.templateId);
+//         alert("Template Saved");
+//       } else {
+//         console.error('Error saving template:', data.error);
+//       }
+//     } else {
+//       const text = await response.text();
+//       console.error('Error saving template: Expected JSON, got:', text);
+//     }
+//   } catch (error) {
+//     console.error('Error saving template:', error);
+//   }
+// };
+
+const saveTemplate = async (editorInstance: any) => {
+  if (!editorInstance) {
+    console.error('Editor instance is undefined');
+    return;
+  }
+
+  try {
+    const html = editorInstance.getHtml();
+    const css = editorInstance.getCss();
+    const components = editorInstance.getComponents();
+    const styles = editorInstance.getStyle();
+
+    // Extract scripts from the editor container
+    const scriptElements = Array.from(
+      document.querySelectorAll('#editor script')
+    ) as HTMLScriptElement[]; // Cast to HTMLScriptElement[]
+    
+    const scripts = scriptElements.map(script => ({
+      src: script.src || '', // Handle external scripts
+      content: script.textContent || '', // Handle inline scripts
+    }));
+
+    const response = await fetch('/api/save-template', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ html, css, components, styles, scripts }),
     });
 
-    editor.BlockManager.add('two-column-block', {
-        label: '2 Columns Section',
-        content: `
-        <section style="display: flex; flex-wrap: wrap; gap: 10px; padding: 20px; background-color: #f0f0f0;">
-          <div style="flex: 1 1 45%; min-width: 250px; background-color: #ffffff; padding: 10px;">
-            <p>Column 1 content goes here.</p>
-          </div>
-          <div style="flex: 1 1 45%; min-width: 250px; background-color: #ffffff; padding: 10px;">
-            <p>Column 2 content goes here.</p>
-          </div>
-        </section>
-      `,
-        category: 'Custom Blocks',
-        attributes: { class: 'gjs-fonts gjs-f-b2' },
-    });
-
-    editor.BlockManager.add('custom-footer-block', {
-        label: 'Custom Footer',
-        content: `
-          <footer style="background-color: #333; color: #fff; padding: 20px;">
-            <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-              <div style="flex: 1; min-width: 200px;">
-                <h4 style="margin-top: 0;">Company Name</h4>
-                <p>1234 Street Name, City, Country</p>
-                <p>Phone: +123456789</p>
-              </div>
-              <div style="flex: 1; min-width: 200px;">
-                <h4 style="margin-top: 0;">Quick Links</h4>
-                <ul style="list-style: none; padding: 0;">
-                  <li><a href="#" style="color: #fff; text-decoration: none;">About Us</a></li>
-                  <li><a href="#" style="color: #fff; text-decoration: none;">Services</a></li>
-                  <li><a href="#" style="color: #fff; text-decoration: none;">Contact</a></li>
-                </ul>
-              </div>
-              <div style="flex: 1; min-width: 200px;">
-                <h4 style="margin-top: 0;">Follow Us</h4>
-                <a href="#" style="color: #fff; margin-right: 10px; text-decoration: none;">Facebook</a>
-                <a href="#" style="color: #fff; margin-right: 10px; text-decoration: none;">Twitter</a>
-                <a href="#" style="color: #fff; text-decoration: none;">Instagram</a>
-              </div>
-            </div>
-            <div style="text-align: center; margin-top: 20px; border-top: 1px solid #555; padding-top: 10px;">
-              <p>&copy; 2024 Company Name. All rights reserved.</p>
-            </div>
-          </footer>
-        `,
-        category: 'Custom Blocks',
-        attributes: { class: 'gjs-fonts gjs-f-footer' },
-    });
-
-    editor.BlockManager.add('map-block', {
-        label: 'Map Block',
-        content: `
-          <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0;">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.1460874796285!2d144.96305831532077!3d-37.81410797975171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf57759da5f5e56c3!2sMelbourne%20VIC%2C%20Australia!5e0!3m2!1sen!2sus!4v1630567181230!5m2!1sen!2sus" 
-              width="600" 
-              height="450" 
-              style="border:0; position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
-              allowfullscreen="" 
-              loading="lazy">
-            </iframe>
-          </div>
-        `,
-        category: 'Custom Blocks',
-        attributes: { class: 'gjs-fonts gjs-f-map' },
-    });
-
-    interface Product {
-        id: number;
-        title: string;
-        price: number;
-        thumbnail: string;
+    if (response.ok) {
+      const data = await response.json();
+      if (data.success) {
+        console.log('Template saved', data.templateId);
+        alert("Template Saved");
+      } else {
+        console.error('Error saving template:', data.error);
+      }
+    } else {
+      const text = await response.text();
+      console.error('Error saving template: Expected JSON, got:', text);
     }
+  } catch (error) {
+    console.error('Error saving template:', error);
+  }
+};
 
-    const script = function (this: HTMLElement) {
-        const apiEndpoint = 'https://dummyjson.com/products';
-    
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {
-                const products = data.products.slice(0, 6);
-                console.log('Product data:', products);
-    
-                const productCards = products.map((product: Product) => `
+
+const myCustomPlugin = (editor: any) => {
+  interface Product {
+    id: number;
+    title: string;
+    price: number;
+    thumbnail: string;
+  }
+
+  const script = function (this: HTMLElement) {
+    const apiEndpoint = 'https://dummyjson.com/products';
+
+    fetch(apiEndpoint)
+      .then(response => response.json())
+      .then(data => {
+        const products = data.products.slice(0, 6);
+        console.log('Product data:', products);
+
+        const productCards = products.map((product: Product) => `
                     <div class="product-card" style="border: 1px solid #ddd; padding: 10px; margin: 10px; border-radius: 5px; text-align: center;">
                         <img src="${product.thumbnail}" alt="${product.title}" class="product-image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;" />
                         <h3 class="product-title" style="margin: 10px 0;">${product.title}</h3>
                         <p class="product-price" style="font-weight: bold;">$${product.price}</p>
                     </div>
                 `).join('');
-    
-                this.innerHTML = `
+
+        this.innerHTML = `
                     <style>
                         .product-container {
                             display: flex;
@@ -135,67 +146,79 @@ const myCustomPlugin = (editor: any) => {
                         ${productCards}
                     </div>
                 `;
-            })
-            .catch(error => {
-                console.error('Error fetching products:', error);
-            });
-    };
-    
-    editor.Components.addType('comp-with-js', {
-        model: {
-            defaults: {
-                script,
-                style: {
-                    width: '100%',
-                    minHeight: '300px',
-                    background: 'white',
-                    overflow: 'auto'
-                }
-            }
-        }
-    });
-    
-    editor.BlockManager.add('test-block', {
-        label: 'Product Block',
-        attributes: { class: 'fa fa-box' },
-        content: { type: 'comp-with-js' },
-    });
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  };
 
+  editor.Components.addType('comp-with-js', {
+    model: {
+      defaults: {
+        script,
+        style: {
+          width: '100%',
+          minHeight: '300px',
+          background: 'white',
+          overflow: 'auto'
+        }
+      }
+    }
+  });
+
+  editor.BlockManager.add('test-block', {
+    label: 'Product Block',
+    attributes: { class: 'fa fa-box' },
+    content: { type: 'comp-with-js' },
+  });
 };
 
-
 const Editor: React.FC = () => {
-    useEffect(() => {
-        const editorInstance = grapesjs.init({
-            container: "#editor",
-            fromElement: true,
-            storageManager: {
-                id: 'gjs-',
-                type: 'local',
-                autosave: true,
-                autoload: true,
-                stepsBeforeSave: 1,
-                // storeComponents: true,
-                // storeStyles: true,
-                // storeHtml: true,
-                // storeCss: true,
-            },
-            plugins: [presetNewsletter, presetWebpage, presetNavbar, gjsForms, myCustomPlugin],
-            pluginsOpts: {
-                'grapesjs-preset-newsletter': {},
-                'grapesjs-preset-webpage': {},
-                'grapesjs-navbar': {},
-                'gjsForms': {},
-                'grapesjs-templates': {}
-            }
-        });
+  useEffect(() => {
+    const editorInstance = grapesjs.init({
+      container: "#editor",
+      fromElement: true,
+      storageManager: {
+        id: 'gjs-',
+        type: 'local',
+        autosave: true,
+        autoload: true,
+        stepsBeforeSave: 1,
+      },
+      plugins: [presetNewsletter, presetWebpage, presetNavbar, gjsForms, myCustomPlugin],
+      pluginsOpts: {
+        'grapesjs-preset-newsletter': {},
+        'grapesjs-preset-webpage': {},
+        'grapesjs-navbar': {},
+        'gjsForms': {},
+        'grapesjs-templates': {}
+      }
+    });
 
-        return () => {
-            editorInstance.destroy();
-        };
-    }, []);
+    if (!editorInstance || typeof editorInstance.getHtml !== 'function') {
+      console.error('Editor instance is undefined or methods are not available');
+      return;
+    }
 
-    return <div id="editor" style={{ height: '150vh' }}></div>;
+    console.log('Editor instance initialized:', editorInstance);
+
+    document.getElementById('save-template-btn')?.addEventListener('click', () => {
+      if (editorInstance) {
+        saveTemplate(editorInstance);
+      } else {
+        console.error('Editor instance is not initialized.');
+      }
+    });
+    
+    return () => {
+      editorInstance.destroy();
+    };
+  }, []);
+
+  return <>
+    <button id="save-template-btn">Save Template</button>
+    <div id="editor" style={{ height: '150vh' }}></div>;
+  </>
 };
 
 export default Editor;
